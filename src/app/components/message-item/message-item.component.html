@@ -1,0 +1,18 @@
+<article class="message-item" [class.own-message]="isOwnMessage">
+  <!-- Author name - only shown for received messages -->
+  @if (!isOwnMessage) {
+    <header class="message-meta">
+      <span class="message-author">{{ message.author }}</span>
+    </header>
+  }
+  
+  <!-- Message text -->
+  <p class="message-text">{{ message.message }}</p>
+  
+  <!-- Timestamp -->
+  <time 
+    class="message-timestamp"
+    [attr.datetime]="message.createdAt">
+    {{ formatDate(message.createdAt) }}
+  </time>
+</article>

@@ -1,0 +1,30 @@
+<section class="chat-composer" aria-label="Message composer">
+  <div class="composer-content-column">
+    <form (ngSubmit)="onSubmit()" class="composer-form" aria-label="Send a message">
+      <div class="input-wrapper">
+        <label for="message-input" class="visually-hidden">Type your message</label>
+        <textarea
+          #messageInput
+          id="message-input"
+          name="message"
+          [(ngModel)]="message"
+          (keydown)="onKeyDown($event)"
+          (input)="onInput()"
+          class="message-input"
+          placeholder="Message"
+          rows="1"
+          [disabled]="isSending"
+          aria-label="Message input">
+        </textarea>
+      </div>
+      
+      <button
+        type="submit"
+        class="send-button"
+        [disabled]="!canSend"
+        aria-label="Send message">
+        <span class="send-button-text">Send</span>
+      </button>
+    </form>
+  </div>
+</section>

@@ -29,4 +29,18 @@ export class ChatApiService {
       headers: this.getHeaders()
     });
   }
+
+  /**
+   * Send a new message to the API
+   * @param message - The message text
+   * @param author - The author name
+   * @returns Observable with the created message
+   */
+  sendMessage(message: string, author: string): Observable<Message> {
+    return this.http.post<Message>(
+      `${this.apiUrl}/messages`,
+      { message, author },
+      { headers: this.getHeaders() }
+    );
+  }
 }

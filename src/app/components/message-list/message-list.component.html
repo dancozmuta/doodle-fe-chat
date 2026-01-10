@@ -1,0 +1,28 @@
+<div class="message-list">
+  @if (messages.length === 0) {
+    <div class="empty-state" role="status" aria-live="polite">
+      <p>No messages yet. Start the conversation!</p>
+    </div>
+  }
+
+  @if (messages.length > 0) {
+    <div class="messages-content-column">
+      <ul 
+        #messagesContainer 
+        class="messages-container" 
+        role="list" 
+        aria-label="Chat messages">
+        @for (message of messages; track trackByMessageId(message); let i = $index) {
+          <li 
+            role="listitem" 
+            [class]="getSpacingClass(i)">
+            <app-message-item
+              [message]="message"
+              [isOwnMessage]="isOwnMessage(message)">
+            </app-message-item>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>
