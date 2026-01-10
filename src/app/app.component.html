@@ -1,3 +1,31 @@
-<div class="app-container">
-  <p>Doodle Chat</p>
+<div class="app-container" role="application" aria-label="Chat application">
+  <div class="chat-wrapper">
+    <!-- Loading state -->
+    @if (isLoading) {
+      <div class="loading-state" role="status" aria-live="polite" aria-busy="true">
+        <p>Loading messages...</p>
+      </div>
+    }
+
+    <!-- Error state -->
+    @if (error && !isLoading) {
+      <div class="error-state" role="alert" aria-live="assertive">
+        <p>{{ error }}</p>
+        <button (click)="loadMessages()" class="retry-button" aria-label="Retry loading messages">Retry</button>
+      </div>
+    }
+
+    <!-- Message list -->
+    @if (!isLoading && !error) {
+      <app-message-list
+        [messages]="messages"
+        [currentUser]="currentUser">
+      </app-message-list>
+    }
+
+    <!-- Chat composer - shown when not loading -->
+    @if (!isLoading) {
+      <app-chat-composer (messageSent)="onMessageSent($event)"></app-chat-composer>
+    }
+  </div>
 </div>
