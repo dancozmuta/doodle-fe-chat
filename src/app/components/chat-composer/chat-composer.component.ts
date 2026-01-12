@@ -37,10 +37,6 @@ export class ChatComposerComponent {
     this.message = '';
     this.isSending = false;
     this._canSend = false;
-
-    if (this.messageInput) {
-      this.messageInput.nativeElement.style.height = 'auto';
-    }
   }
 
   onKeyDown(event: KeyboardEvent): void {
@@ -55,21 +51,6 @@ export class ChatComposerComponent {
   onInput(): void {
     const trimmedLength = this.message.trim().length;
     this._canSend = trimmedLength > 0 && !this.isSending;
-    
-    if (this.messageInput) {
-      const textarea = this.messageInput.nativeElement;
-      textarea.style.height = 'auto';
-      
-      const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight) || (parseFloat(getComputedStyle(textarea).fontSize) * 1.4);
-      const scrollHeight = textarea.scrollHeight;
-      
-      if (scrollHeight > lineHeight + 1) {
-        const maxHeight = 120;
-        textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
-      } else {
-        textarea.style.height = 'auto';
-      }
-    }
   }
 
   get canSend(): boolean {

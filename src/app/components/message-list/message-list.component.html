@@ -14,8 +14,8 @@
         aria-label="Chat messages">
         @for (message of messages; track trackByMessageId(message); let i = $index) {
           <li 
-            role="listitem" 
-            [class]="getSpacingClass(i)">
+            role="listitem"
+            [class.separated]="isSeparated(i)">
             <app-message-item
               [message]="message"
               [isOwnMessage]="isOwnMessage(message)">

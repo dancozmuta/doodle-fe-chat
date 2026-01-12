@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ChatApiService } from './services/chat-api.service';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { MessageService } from './services/message.service';
 import { Message } from './models/message.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -8,85 +10,80 @@ import { Message } from './models/message.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   isLoading: boolean = false;
   error: string | null = null;
   currentUser: string = 'Dan C';
+  
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private chatApiService: ChatApiService,
+    private messageService: MessageService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadMessages();
+    this.subscribeToMessageState();
+    this.messageService.initialize();
+    
+    setTimeout(() => {
+      this.messageService.scrollToBottom();
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
-   * Load messages from the API
+   * Subscribe to message service observables
    */
-  loadMessages(): void {
-    this.isLoading = true;
-    this.error = null;
+  private subscribeToMessageState(): void {
+    this.messageService.messages$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(messages => {
+        this.messages = messages;
+        this.cdr.detectChanges();
+      });
 
-    this.chatApiService.getMessages().subscribe({
-      next: (messages) => {
-        console.log('Messages received:', messages);
-        console.log('Number of messages:', messages.length);
-        // API returns reverse chronological, sort to chronological order
-        this.messages = this.sortMessagesChronologically(messages);
-        this.isLoading = false;
+    this.messageService.loading$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(loading => {
+        this.isLoading = loading;
         this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error fetching messages:', error);
-        this.error = 'Failed to load messages. Please try again.';
-        this.isLoading = false;
+      });
+
+    this.messageService.error$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(error => {
+        this.error = error;
         this.cdr.detectChanges();
-      }
-    });
+      });
   }
 
   /**
    * Handle message sent from chat composer
    */
   onMessageSent(event: { message: string; author: string }): void {
-    this.chatApiService.sendMessage(event.message, event.author).subscribe({
-      next: (newMessage) => {
-        console.log('Message sent successfully:', newMessage);
-        this.messages = [...this.messages, newMessage];
-        this.cdr.detectChanges();
-        
+    this.messageService.sendMessage(event.message, event.author).subscribe({
+      next: () => {
         setTimeout(() => {
-          this.scrollToBottom();
+          this.messageService.scrollToBottom();
         }, 100);
       },
-      error: (error) => {
-        console.error('Error sending message:', error);
-        this.error = 'Failed to send message. Please try again.';
+      error: () => {
         this.cdr.detectChanges();
       }
     });
   }
 
   /**
-   * Sort messages chronologically (oldest first, newest last)
-   * API returns in reverse chronological order
+   * Retry loading messages
    */
-  private sortMessagesChronologically(messages: Message[]): Message[] {
-    return [...messages].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return dateA - dateB;
-    });
-  }
-
-  private scrollToBottom(): void {
-    const messagesContainer = document.querySelector('.messages-container');
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
+  loadMessages(): void {
+    this.messageService.loadMessages();
   }
 
 }

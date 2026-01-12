@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Message } from '../models/message.model';
+import { GetMessagesParams } from '../models/message-api.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,26 @@ export class ChatApiService {
   constructor(private http: HttpClient) { }
 
   /**
-   * Get all messages from the API
-   * Requires Bearer token authentication as per backend API spec
+   * Get messages from the API with optional pagination
+   * @param params - Query parameters (after, before, limit)
+   * @returns Observable with messages array
    */
-  getMessages(): Observable<Message[]> {
+  getMessages(params?: GetMessagesParams): Observable<Message[]> {
+    let httpParams = new HttpParams();
+    
+    if (params?.after) {
+      httpParams = httpParams.set('after', params.after);
+    }
+    if (params?.before) {
+      httpParams = httpParams.set('before', params.before);
+    }
+    if (params?.limit) {
+      httpParams = httpParams.set('limit', params.limit.toString());
+    }
+
     return this.http.get<Message[]>(`${this.apiUrl}/messages`, {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
+      params: httpParams
     });
   }
 

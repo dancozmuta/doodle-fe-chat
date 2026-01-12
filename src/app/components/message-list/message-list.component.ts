@@ -20,22 +20,18 @@ export class MessageListComponent implements AfterViewChecked, OnChanges {
   }
 
   /**
-   * Determine spacing class based on message position
-   * Returns 'spacing-received' for same-side messages, 'spacing-mixed' for different sides
+   * Check if message should have separated spacing (16px)
+   * Returns true when side changes from previous message
    */
-  getSpacingClass(index: number): string {
-    if (index === this.messages.length - 1) {
-      return '';
+  isSeparated(index: number): boolean {
+    if (index === 0) {
+      return false;
     }
 
-    const currentIsOwn = this.isOwnMessage(this.messages[index]);
-    const nextIsOwn = this.isOwnMessage(this.messages[index + 1]);
+    const prevMessage = this.messages[index - 1];
+    const currentMessage = this.messages[index];
 
-    if (currentIsOwn === nextIsOwn) {
-      return 'spacing-received';
-    } else {
-      return 'spacing-mixed';
-    }
+    return this.isOwnMessage(prevMessage) !== this.isOwnMessage(currentMessage);
   }
 
   /**

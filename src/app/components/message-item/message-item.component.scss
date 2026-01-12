@@ -1,5 +1,5 @@
 .message-item {
-  max-width: var(--message-max-width);
+  max-width: 66%;
   min-width: var(--message-min-width);
   width: fit-content;
   padding: var(--message-padding);
@@ -45,9 +45,9 @@
   }
   
   .message-timestamp {
+    display: block;
     text-align: right;
     margin-top: var(--spacing-xs);
-    margin-left: auto;
   }
 }
 

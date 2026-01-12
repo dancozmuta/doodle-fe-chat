@@ -5,22 +5,22 @@
 :root {
   /* Colors - Primary Palette */
   --color-primary: #ff876d;
-  --color-primary-hover: #E55A2B;
+  --color-primary-hover: #e55a2b;
   --color-secondary: #3798d4;
   --color-secondary-dark: #2e77a4;
 
   /* Message Bubble Colors */
-  --color-bubble-other: #FFFFFF;
+  --color-bubble-other: #ffffff;
   --color-bubble-own: #fcf6c5;
   --color-bubble-border: #d4dade;
 
   /* Background Colors */
-  --color-bg-main: #F5F5F5;
-  
+  --color-bg-main: #f5f5f5;
+
   /* Text Colors */
   --color-text-primary: #212121;
   --color-text-secondary: #b3bcc3;
-  --color-text-error: #D32F2F;
+  --color-text-error: #d32f2f;
 
   /* Spacing System */
   --spacing-xs: 0.25rem;
@@ -48,13 +48,14 @@
 
   /* Chat Specific */
   --chat-input-bar-height: 64px;
-  --message-max-width: min(640px, 65%);
+  --message-max-width: min(640px, 66%);
   --message-min-width: 120px;
   --message-padding: 16px;
   --message-gap-received: 8px; /* Between received messages */
   --message-gap-mixed: 16px; /* Between received and sent messages */
-  --content-column-max-width: 1100px;
+  --content-column-max-width: 640px;
   --content-horizontal-padding: 24px;
+  --content-vertical-padding: 16px;
 }
 
 /* Responsive Breakpoints */
