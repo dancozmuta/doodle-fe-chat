@@ -1,21 +1,21 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MessageService } from './features/chat/services/message.service';
-import { Message } from './features/chat/models/message.model';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { MessageService } from "./features/chat/services/message.service";
+import { Message } from "./features/chat/models/message.model";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: false,
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   isLoading: boolean = false;
   error: string | null = null;
-  currentUser: string = 'Dan C';
-  
+  currentUser: string = "Dan C";
+
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribeToMessageState();
     this.messageService.initialize();
-    
+
     setTimeout(() => {
       this.messageService.scrollToBottom();
     }, 100);
@@ -43,21 +43,21 @@ export class AppComponent implements OnInit, OnDestroy {
   private subscribeToMessageState(): void {
     this.messageService.messages$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(messages => {
+      .subscribe((messages) => {
         this.messages = messages;
         this.cdr.detectChanges();
       });
 
     this.messageService.loading$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(loading => {
+      .subscribe((loading) => {
         this.isLoading = loading;
         this.cdr.detectChanges();
       });
 
     this.messageService.error$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(error => {
+      .subscribe((error) => {
         this.error = error;
         this.cdr.detectChanges();
       });
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -85,5 +85,4 @@ export class AppComponent implements OnInit, OnDestroy {
   loadMessages(): void {
     this.messageService.loadMessages();
   }
-
 }
