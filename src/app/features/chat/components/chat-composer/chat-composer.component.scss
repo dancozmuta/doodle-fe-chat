@@ -1,0 +1,64 @@
+:host {
+  flex: 0 0 auto;
+  display: block;
+}
+
+.chat-composer {
+  background-color: var(--color-secondary);
+  padding: var(--spacing-sm);
+  border-top: 1px solid var(--color-bubble-border);
+  min-height: var(--chat-input-bar-height);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.composer-content-column {
+  max-width: var(--content-column-max-width);
+  width: 100%;
+  padding: 0 var(--content-horizontal-padding);
+}
+
+.composer-form {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-sm);
+}
+
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-md);
+  border: 2px solid var(--color-secondary-dark);
+  box-sizing: border-box;
+
+  &:focus-within {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (max-width: 768px) {
+  .composer-content-column {
+    padding: 0;
+  }
+}

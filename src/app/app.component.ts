@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MessageService } from './services/message.service';
-import { Message } from './models/message.model';
+import { MessageService } from './features/chat/services/message.service';
+import { Message } from './features/chat/models/message.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

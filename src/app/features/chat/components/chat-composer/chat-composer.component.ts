@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class ChatComposerComponent {
   @Output() messageSent = new EventEmitter<{ message: string; author: string }>();
-  @ViewChild('messageInput', { static: false }) messageInput!: ElementRef<HTMLTextAreaElement>;
   
   message: string = '';
   author: string = 'Dan C';

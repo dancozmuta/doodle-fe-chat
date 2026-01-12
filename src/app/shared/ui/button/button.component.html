@@ -1,0 +1,8 @@
+<button
+  [type]="type"
+  [disabled]="disabled"
+  (click)="onClick()"
+  class="app-button"
+  [attr.aria-label]="label">
+  <span class="app-button-text">{{ label }}</span>
+</button>
