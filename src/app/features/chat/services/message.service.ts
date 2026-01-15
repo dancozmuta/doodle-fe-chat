@@ -53,13 +53,11 @@ export class MessageService {
 
     this.chatApiService.getMessages().subscribe({
       next: (messages) => {
-        console.log('Initial messages received:', messages.length);
         const sortedMessages = this.sortMessagesChronologically(messages);
         this.messagesSubject.next(sortedMessages);
         this.loadingSubject.next(false);
       },
       error: (error) => {
-        console.error('Error fetching messages:', error);
         this.errorSubject.next('Failed to load messages. Please try again.');
         this.loadingSubject.next(false);
       }
@@ -73,14 +71,12 @@ export class MessageService {
     return new Observable(observer => {
       this.chatApiService.sendMessage(message, author).subscribe({
         next: (newMessage) => {
-          console.log('Message sent successfully:', newMessage);
           const currentMessages = this.messagesSubject.value;
           this.messagesSubject.next([...currentMessages, newMessage]);
           observer.next(newMessage);
           observer.complete();
         },
         error: (error) => {
-          console.error('Error sending message:', error);
           this.errorSubject.next('Failed to send message. Please try again.');
           observer.error(error);
         }
@@ -143,7 +139,6 @@ export class MessageService {
             limit: 50
           }).pipe(
             catchError((error) => {
-              console.error('Error polling messages:', error);
               return EMPTY;
             })
           );

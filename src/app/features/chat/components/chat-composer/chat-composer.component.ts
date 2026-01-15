@@ -1,6 +1,4 @@
-import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-chat-composer',
@@ -15,8 +13,6 @@ export class ChatComposerComponent {
   author: string = 'Dan C';
   isSending: boolean = false;
   private _canSend: boolean = false;
-
-  constructor(private cdr: ChangeDetectorRef) {}
 
   onSubmit(): void {
     const trimmedMessage = this.message.trim();
