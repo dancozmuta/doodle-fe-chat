@@ -9,8 +9,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
+  box-sizing: border-box;
 }
 
 .empty-state {
@@ -24,27 +26,27 @@
 }
 
 .messages-content-column {
-  max-width: var(--content-column-max-width);
-  padding: 0 var(--content-horizontal-padding);
+  max-width: var(--content-column-inner-width);
   width: 100%;
   margin: 0 auto;
-  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
+  /* Adjust padding to account for scrollbar: add to left, subtract from right */
+  padding-left: calc(
+    var(--content-horizontal-padding) + var(--scrollbar-width)
+  );
+  padding-right: calc(
+    var(--content-horizontal-padding) - var(--scrollbar-width)
+  );
+  box-sizing: border-box;
 }
 
 .messages-container {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 0;
   list-style: none;
   margin: 0;
-  margin-right: -8px;
+  padding: 0;
 
   li:last-child {
     padding-bottom: var(--content-vertical-padding);
@@ -52,23 +54,6 @@
 
   li:first-child {
     padding-top: var(--content-vertical-padding);
-  }
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
   }
 
   > li {
@@ -91,6 +76,7 @@
   }
 
   .messages-content-column {
-    padding: 0 var(--spacing-lg);
+    padding-left: 32px;
+    padding-right: 16px;
   }
 }

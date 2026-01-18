@@ -48,19 +48,30 @@
 
   /* Chat Specific */
   --chat-input-bar-height: 64px;
-  --message-max-width: min(640px, 66%);
   --message-min-width: 120px;
-  --message-padding: 16px;
-  --message-gap-received: 8px; /* Between received messages */
-  --message-gap-mixed: 16px; /* Between received and sent messages */
+  
+  /* Content Layout - Base dimensions */
   --content-column-max-width: 640px;
-  --content-horizontal-padding: 24px;
-  --content-vertical-padding: 16px;
+  --content-horizontal-padding: 24px; /* Layout-specific, may differ from general spacing */
+  --content-vertical-padding: var(--spacing-md); /* 16px - matches spacing system */
+  
+  /* Content Layout - Calculated dimensions */
+  /* Inner width of content column (max-width minus left/right padding) */
+  --content-column-inner-width: calc(var(--content-column-max-width) - 2 * var(--content-horizontal-padding));
+  
+  /* Message Spacing - Using spacing system tokens for consistency */
+  --message-padding: var(--spacing-md); /* 16px */
+  --message-gap-received: var(--spacing-sm); /* 8px - Between received messages */
+  --message-gap-mixed: var(--spacing-md); /* 16px - Between received and sent messages */
+  
+  /* Scrollbar */
+  --scrollbar-width: 8px; /* Scrollbar width for layout calculations */
+  --composer-right-padding: calc(var(--content-horizontal-padding) - var(--scrollbar-width)); /* Accounts for scrollbar on messages */
 }
 
 /* Responsive Breakpoints */
 @media (max-width: 600px) {
   :root {
-    --message-max-width: 90%;
+    --content-column-inner-width: 90%;
   }
 }

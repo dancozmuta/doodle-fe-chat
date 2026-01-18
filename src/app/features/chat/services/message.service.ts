@@ -1,11 +1,20 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, timer, switchMap, catchError, EMPTY, fromEvent } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ChatApiService } from './chat-api.service';
-import { Message } from '../models/message.model';
+import { Injectable } from "@angular/core";
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  timer,
+  switchMap,
+  catchError,
+  EMPTY,
+  fromEvent,
+} from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { ChatApiService } from "./chat-api.service";
+import { Message } from "../models/message.model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class MessageService {
   private readonly POLL_INTERVAL = 2000;
@@ -58,9 +67,9 @@ export class MessageService {
         this.loadingSubject.next(false);
       },
       error: (error) => {
-        this.errorSubject.next('Failed to load messages. Please try again.');
+        this.errorSubject.next("Failed to load messages. Please try again.");
         this.loadingSubject.next(false);
-      }
+      },
     });
   }
 
@@ -68,7 +77,7 @@ export class MessageService {
    * Send a new message
    */
   sendMessage(message: string, author: string): Observable<Message> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       this.chatApiService.sendMessage(message, author).subscribe({
         next: (newMessage) => {
           const currentMessages = this.messagesSubject.value;
@@ -77,9 +86,9 @@ export class MessageService {
           observer.complete();
         },
         error: (error) => {
-          this.errorSubject.next('Failed to send message. Please try again.');
+          this.errorSubject.next("Failed to send message. Please try again.");
           observer.error(error);
-        }
+        },
       });
     });
   }
@@ -95,16 +104,16 @@ export class MessageService {
    * Check if user is scrolled to the bottom of the message container
    */
   isScrolledToBottom(): boolean {
-    const messagesContainer = document.querySelector('.messages-container');
+    const messagesContainer = document.querySelector(".message-list");
     if (!messagesContainer) {
       return true;
     }
-    
+
     const threshold = 100;
-    const isAtBottom = 
-      messagesContainer.scrollHeight - messagesContainer.scrollTop <= 
+    const isAtBottom =
+      messagesContainer.scrollHeight - messagesContainer.scrollTop <=
       messagesContainer.clientHeight + threshold;
-    
+
     return isAtBottom;
   }
 
@@ -112,7 +121,7 @@ export class MessageService {
    * Scroll message container to bottom
    */
   scrollToBottom(): void {
-    const messagesContainer = document.querySelector('.messages-container');
+    const messagesContainer = document.querySelector(".message-list");
     if (messagesContainer) {
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
@@ -128,20 +137,22 @@ export class MessageService {
           if (!this.isPageVisible || this.loadingSubject.value) {
             return EMPTY;
           }
-          
+
           const mostRecentMessage = this.getMostRecentMessage();
           if (!mostRecentMessage) {
             return EMPTY;
           }
 
-          return this.chatApiService.getMessages({
-            after: mostRecentMessage.createdAt,
-            limit: 50
-          }).pipe(
-            catchError((error) => {
-              return EMPTY;
+          return this.chatApiService
+            .getMessages({
+              after: mostRecentMessage.createdAt,
+              limit: 50,
             })
-          );
+            .pipe(
+              catchError((error) => {
+                return EMPTY;
+              })
+            );
         }),
         takeUntil(this.destroy$)
       )
@@ -150,7 +161,7 @@ export class MessageService {
           if (newMessages && newMessages.length > 0) {
             this.mergeNewMessages(newMessages);
           }
-        }
+        },
       });
   }
 
@@ -158,10 +169,10 @@ export class MessageService {
    * Setup Page Visibility API listener to pause/resume polling
    */
   private setupPageVisibilityListener(): void {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
       this.isPageVisible = !document.hidden;
-      
-      fromEvent(document, 'visibilitychange')
+
+      fromEvent(document, "visibilitychange")
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
           this.isPageVisible = !document.hidden;
@@ -191,17 +202,20 @@ export class MessageService {
 
     const sortedNewMessages = this.sortMessagesChronologically(newMessages);
     const currentMessages = this.messagesSubject.value;
-    const existingIds = new Set(currentMessages.map(m => m._id).filter(Boolean));
-    
-    const uniqueNewMessages = sortedNewMessages.filter(msg => {
+    const existingIds = new Set(
+      currentMessages.map((m) => m._id).filter(Boolean)
+    );
+
+    const uniqueNewMessages = sortedNewMessages.filter((msg) => {
       if (msg._id && existingIds.has(msg._id)) {
         return false;
       }
       if (!msg._id) {
-        return !currentMessages.some(existing => 
-          existing.createdAt === msg.createdAt && 
-          existing.author === msg.author &&
-          existing.message === msg.message
+        return !currentMessages.some(
+          (existing) =>
+            existing.createdAt === msg.createdAt &&
+            existing.author === msg.author &&
+            existing.message === msg.message
         );
       }
       return true;
@@ -213,7 +227,7 @@ export class MessageService {
 
     const wasAtBottom = this.isScrolledToBottom();
     const mergedMessages = [...currentMessages];
-    
+
     for (const newMsg of uniqueNewMessages) {
       const insertIndex = this.findInsertionIndex(mergedMessages, newMsg);
       if (insertIndex === mergedMessages.length) {
@@ -237,14 +251,14 @@ export class MessageService {
    */
   private findInsertionIndex(messages: Message[], newMessage: Message): number {
     const newTimestamp = new Date(newMessage.createdAt).getTime();
-    
+
     for (let i = 0; i < messages.length; i++) {
       const existingTimestamp = new Date(messages[i].createdAt).getTime();
       if (newTimestamp < existingTimestamp) {
         return i;
       }
     }
-    
+
     return messages.length;
   }
 

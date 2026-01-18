@@ -15,9 +15,10 @@
 }
 
 .composer-content-column {
-  max-width: var(--content-column-max-width);
+  max-width: var(--content-column-inner-width);
   width: 100%;
-  padding: 0 var(--content-horizontal-padding);
+  padding-left: var(--content-horizontal-padding);
+  padding-right: var(--content-horizontal-padding); // Match messages padding now that scrollbar space is reserved on messages container
 }
 
 .composer-form {
@@ -59,6 +60,7 @@
 
 @media (max-width: 768px) {
   .composer-content-column {
-    padding: 0;
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg); // Match messages padding now that scrollbar space is reserved on messages container
   }
 }

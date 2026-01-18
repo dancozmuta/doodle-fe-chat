@@ -1,4 +1,6 @@
-<div class="message-list">
+<div 
+  #messagesContainer 
+  class="message-list">
   @if (messages.length === 0) {
     <div class="empty-state" role="status" aria-live="polite">
       <p>No messages yet. Start the conversation!</p>
@@ -8,7 +10,6 @@
   @if (messages.length > 0) {
     <div class="messages-content-column">
       <ul 
-        #messagesContainer 
         class="messages-container" 
         role="list" 
         aria-label="Chat messages">
