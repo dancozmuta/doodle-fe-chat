@@ -22,3 +22,15 @@ yarn-error.log*
 
 # Environment files (local config with secrets)
 src/environments/environment.ts
+
+# Test files
+## src/app/**/*.spec.ts
+
+# Test coverage
+coverage/
+
+
+# Playwright
+playwright-report/
+test-results/
+trace.zip
