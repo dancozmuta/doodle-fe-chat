@@ -85,7 +85,7 @@ Create/update snapshots:
 npm run e2e -- --update-snapshots
 
 Open playwright
-playwright test --ui
+npx playwright test --ui
 
 Baseline images live next to the test file (for example: `e2e/chat.spec.ts-snapshots/`).
 Failure artifacts are written to `test-results/` / `playwright-report/` and should not be committed.
