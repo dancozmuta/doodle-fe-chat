@@ -63,31 +63,29 @@ The project uses a simple testing pyramid:
 
 Unit + component tests (Vitest):
 
-```
 npm test            # watch mode (TDD-friendly)
 npm run test:run    # single run (CI-style)
 npm run test:coverage
-```
+
 
 E2E tests (Playwright):
 
-```
 # first time only (installs browser binaries)
 npx playwright install chromium
 
 # run e2e tests (starts the app on port 4201)
 npm run e2e
-```
+
 
 ### VISUAL SNAPSHOTS (PLAYWRIGHT)
 
 This repo includes a visual regression snapshot for the chat UI.
 
 Create/update snapshots:
-
-```
 npm run e2e -- --update-snapshots
-```
+
+Open playwright
+playwright test --ui
 
 Baseline images live next to the test file (for example: `e2e/chat.spec.ts-snapshots/`).
 Failure artifacts are written to `test-results/` / `playwright-report/` and should not be committed.
